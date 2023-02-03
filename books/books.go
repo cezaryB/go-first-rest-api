@@ -75,14 +75,15 @@ func HandleUpdateBook(w http.ResponseWriter, req *http.Request, ps httprouter.Pa
 		return
 	}
 
-	if idx == -1 {
-		http.Error(w, "Resource not found", http.StatusNotFound)
-	}
-
 	for i, v := range BOOKS {
 		if fmt.Sprint(v.Id) == ps.ByName("id") {
 			idx = i
 		}
+	}
+
+	if idx == -1 {
+		http.Error(w, "Resource not found", http.StatusNotFound)
+		return
 	}
 
 	if t != "" {
