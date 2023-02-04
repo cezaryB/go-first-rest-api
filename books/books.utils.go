@@ -5,24 +5,24 @@ import (
 	"strings"
 )
 
-func TransformGenre(g string) (Genre, error) {
-	var gtransformed Genre
+func transformGenre(g string) (genre, error) {
+	var gtransformed genre
 	var err error
 	g = strings.ToUpper(g)
 	
 	switch g {
 	case "HORROR":
-		gtransformed = Horror
+		gtransformed = horror
 	case "COMEDY":
-		gtransformed = Comedy
+		gtransformed = comedy
 	case "THRILLER":
-		gtransformed = Thriller
+		gtransformed = thriller
 	case "CRIMINAL":
-		gtransformed = Criminal
+		gtransformed = criminal
 	case "SciFi":
-		gtransformed = SciFi
+		gtransformed = scifi
 	case "FANTASY":
-		gtransformed = Fantasy
+		gtransformed = fantasy
 	case "":
 		err = errors.New("Empty string")
 	default:

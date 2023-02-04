@@ -1,19 +1,19 @@
 package books
 
-type Genre int
+type genre int
 
 const (
-	Horror Genre = iota
-	Comedy
-	Thriller
-	Criminal
-	SciFi
-	Fantasy
+	horror genre = iota
+	comedy
+	thriller
+	criminal
+	scifi
+	fantasy
 )
 
 type book struct {
 	Id int
 	Title string
 	Author string
-	Genre Genre
+	Genre genre
 }

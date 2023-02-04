@@ -1,6 +1,11 @@
 package users
 
 type user struct {
-	username string
+	Username string
+	Email string
 	password string
+}
+
+type authStatus struct {
+	Authenticated bool
 }
