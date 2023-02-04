@@ -9,9 +9,9 @@ import (
 )
 
 var BOOKS = []book{
-	{ Id: 1, Title: "Arkham horror", Author: "H.P.Lovecraft", Genre: Horror },
-	{ Id: 2, Title: "Lenore's shadow", Author: "E.A.Poe", Genre: Horror },
-	{ Id: 3, Title: "Shadow of the wind", Author: "Carlos Ruiz Zafon", Genre: Thriller },
+	{ Id: 1, Title: "Arkham horror", Author: "H.P.Lovecraft", Genre: horror },
+	{ Id: 2, Title: "Lenore's shadow", Author: "E.A.Poe", Genre: horror },
+	{ Id: 3, Title: "Shadow of the wind", Author: "Carlos Ruiz Zafon", Genre: thriller },
 }
 
 func HandleGetBooks(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
@@ -39,7 +39,7 @@ func HandlePostBook(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	t := req.FormValue("title")
 	a := req.FormValue("author")
 	g := req.FormValue("genre")
-	genre, e := TransformGenre(g)
+	genre, e := transformGenre(g)
 	i := len(BOOKS) + 1
 
 	if t == "" || a == "" || g == "" {
@@ -68,21 +68,23 @@ func HandleUpdateBook(w http.ResponseWriter, req *http.Request, ps httprouter.Pa
 	t := req.FormValue("title")
 	a := req.FormValue("author")
 	g := req.FormValue("genre")
-	genre, e := TransformGenre(g)
+	genre, e := transformGenre(g)
 
 	if e != nil && e.Error() != "Empty string" {
 		http.Error(w, e.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if idx == -1 {
-		http.Error(w, "Resource not found", http.StatusNotFound)
-	}
-
+	// MOVE THIS CODE TO HELPER FUNCTION
 	for i, v := range BOOKS {
 		if fmt.Sprint(v.Id) == ps.ByName("id") {
 			idx = i
 		}
+	}
+	// ONCE THE CODE IS MOVED SWAP LINE BELOW WITH THE CALL TO THE NEW HELPER METHOD
+	if idx == -1 {
+		http.Error(w, "Resource not found", http.StatusNotFound)
+		return
 	}
 
 	if t != "" {
