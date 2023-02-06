@@ -2,6 +2,7 @@ package books
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -30,4 +31,24 @@ func transformGenre(g string) (genre, error) {
 	}
 
 	return gtransformed, err
+}
+
+func findBookById(id string, books []book) (book, error) {
+	var err error
+	var b book
+	idx := -1
+
+	for i, v := range books {
+		if fmt.Sprint(v.Id) == id {
+			idx = i
+		}
+	}
+
+	if idx > -1 {
+		return books[idx], err
+	}
+
+	err = errors.New("Book not found")
+
+	return b, err
 }
