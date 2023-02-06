@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -16,6 +16,6 @@ func JSONcontentMidleware(next httprouter.Handle) httprouter.Handle {
 }
 
 func RouterWithLog(router http.Handler, port string) http.Handler {
-	fmt.Printf("Server listenning on port %v ", port)
+	log.Printf("Server listenning on port %v ", port)
 	return router
 }

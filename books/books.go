@@ -64,7 +64,6 @@ func HandlePostBook(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 }
 
 func HandleUpdateBook(w http.ResponseWriter, req *http.Request, ps httprouter.Params) {
-	idx := -1
 	t := req.FormValue("title")
 	a := req.FormValue("author")
 	g := req.FormValue("genre")
@@ -75,29 +74,24 @@ func HandleUpdateBook(w http.ResponseWriter, req *http.Request, ps httprouter.Pa
 		return
 	}
 
-	// MOVE THIS CODE TO HELPER FUNCTION
-	for i, v := range BOOKS {
-		if fmt.Sprint(v.Id) == ps.ByName("id") {
-			idx = i
-		}
-	}
-	// ONCE THE CODE IS MOVED SWAP LINE BELOW WITH THE CALL TO THE NEW HELPER METHOD
-	if idx == -1 {
-		http.Error(w, "Resource not found", http.StatusNotFound)
+	b, e := findBookById(ps.ByName("id"), BOOKS)
+
+	if e != nil {
+		http.Error(w, e.Error(), http.StatusNotFound)
 		return
 	}
 
 	if t != "" {
-		BOOKS[idx].Title = t
+		b.Title = t
 	}
 
 	if a != "" {
-		BOOKS[idx].Author = a
+		b.Author = a
 	}
 
 	if g != "" {
-		BOOKS[idx].Genre = genre
+		b.Genre = genre
 	}
 
-	json.NewEncoder(w).Encode(BOOKS[idx])
+	json.NewEncoder(w).Encode(b)
 }

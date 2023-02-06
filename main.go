@@ -1,11 +1,11 @@
 package main
 
 import (
-	b "books"
 	"log"
-	m "middleware"
+	b "first-rest-api/books"
+	m "first-rest-api/middleware"
+	u "first-rest-api/users"
 	"net/http"
-	u "users"
 
 	"github.com/julienschmidt/httprouter"
 )
