@@ -3,7 +3,7 @@ package books
 type genre int
 
 const (
-	horror genre = iota
+	horror genre = iota + 1
 	comedy
 	thriller
 	criminal
