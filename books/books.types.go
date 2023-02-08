@@ -3,12 +3,13 @@ package books
 type genre int
 
 const (
-	horror genre = iota + 1
+	horror genre = iota
 	comedy
 	thriller
 	criminal
 	scifi
 	fantasy
+	none
 )
 
 type book struct {
