@@ -29,7 +29,7 @@ func verifyIfPasswordsMatch(hashedPwd string, plainPwd string) bool {
 	return true
 }
 
-func verifyIfUsernameIsValid(username string, users []user) bool {
+func validateUsername(username string, users []user) bool {
 	for _, v := range users {
 		if v.Username == username {
 			return false
