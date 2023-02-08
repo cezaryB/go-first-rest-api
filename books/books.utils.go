@@ -7,8 +7,8 @@ import (
 )
 
 func transformGenre(g string) (genre, error) {
-	var gtransformed genre
 	var err error
+	gtransformed := none
 	g = strings.ToUpper(g)
 	
 	switch g {
@@ -20,7 +20,7 @@ func transformGenre(g string) (genre, error) {
 		gtransformed = thriller
 	case "CRIMINAL":
 		gtransformed = criminal
-	case "SciFi":
+	case "SCIFI":
 		gtransformed = scifi
 	case "FANTASY":
 		gtransformed = fantasy
@@ -49,6 +49,5 @@ func findBookById(id string, books []book) (book, error) {
 	}
 
 	err = errors.New("Book not found")
-
 	return b, err
 }

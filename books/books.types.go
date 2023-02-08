@@ -9,6 +9,7 @@ const (
 	criminal
 	scifi
 	fantasy
+	none
 )
 
 type book struct {

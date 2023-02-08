@@ -20,7 +20,7 @@ func HandlePostUser(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 		return
 	}
 
-	if !verifyIfUsernameIsValid(n, USERS) {
+	if !validateUsername(n, USERS) {
 		http.Error(w, "This username is already taken", http.StatusBadRequest)
 		return
 	}
