@@ -18,3 +18,11 @@ type book struct {
 	Author string
 	Genre genre
 }
+
+type createBookDTO struct {
+	Title string
+	Author string
+	Genre string
+}
+
+type updateBookDTO = createBookDTO

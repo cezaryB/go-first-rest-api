@@ -2,25 +2,26 @@ package users
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
 
-var USERS = []user{}
+var USERS = []user{
+	{Username: "Example user", Email: "example@gmail.com", password: "$2a$04$WxRvBX5FDN6xanjSSg73Tu6V6yBlYvTomSRec6gWL/WHUvK9SEzNu"},
+}
 
 func HandlePostUser(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	n := req.FormValue("username")
-	e := req.FormValue("email")
-	p := req.FormValue("password")
+	var payload createUserDTO
+	json.NewDecoder(req.Body).Decode(&payload)
+	u, e, p := payload.Username, payload.Email, payload.Password
 
-	if n == "" || p == "" || e == "" {
-		http.Error(w, "You need to provide username, email and password", http.StatusInternalServerError)
+	if u == "" || p == "" || e == "" {
+		http.Error(w, "You need to provide username, email and password", http.StatusBadRequest)
 		return
 	}
 
-	if !validateUsername(n, USERS) {
+	if !validateUsername(u, USERS) {
 		http.Error(w, "This username is already taken", http.StatusBadRequest)
 		return
 	}
@@ -34,35 +35,42 @@ func HandlePostUser(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	}
 
 	nUser := user{
-		Username: n,
+		Username: u,
 		Email: e,
 		password: string(hashedPwd),
 	}
 
 	USERS = append(USERS, nUser)
-	fmt.Println(USERS)
+	
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(nUser)
 }
 
 func HandleAuthenticateUser(w http.ResponseWriter, req * http.Request, _ httprouter.Params) {
-	n := req.FormValue("username")
-	p := req.FormValue("password")
-	s := authStatus{ Authenticated: false }
-	var u user
+	var user user
+	var payload authenticateUserDTO
 
-	if n == "" || p == "" {
+	json.NewDecoder(req.Body).Decode(&payload)
+	u, p := payload.Username, payload.Password
+	s := authStatus{ Authenticated: false }
+
+	if u == "" || p == "" {
 		http.Error(w, "You need to provide username and password", http.StatusInternalServerError)
 		return
 	}
 
 	for _, v := range USERS {
-		if v.Username == n {
-			u = v
+		if v.Username == u {
+			user = v
 		}
 	}
 
-	if verifyIfPasswordsMatch(u.password, p) {
+	if verifyIfPasswordsMatch(user.password, p) {
 		s = authStatus{ Authenticated: true }
+	}
+
+	if !s.Authenticated	{
+		w.WriteHeader(http.StatusUnauthorized)
 	}
 
 	json.NewEncoder(w).Encode(s)

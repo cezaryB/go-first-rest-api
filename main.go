@@ -1,16 +1,15 @@
 package main
 
 import (
-	"log"
 	b "first-rest-api/books"
 	m "first-rest-api/middleware"
 	u "first-rest-api/users"
+
+	"log"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
-
-
 
 func main() {
 	p := ":8080"
@@ -25,6 +24,5 @@ func main() {
 	router.POST("/users/login", m.JSONcontentMidleware(u.HandleAuthenticateUser))
 
 	log.Fatal(http.ListenAndServe(p, m.RouterWithLog(router, p)))
-	
 }
 
