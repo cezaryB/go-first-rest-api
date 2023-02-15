@@ -36,9 +36,10 @@ func HandleGetBook(w http.ResponseWriter, req *http.Request, ps httprouter.Param
 }
 
 func HandlePostBook(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	t := req.FormValue("title")
-	a := req.FormValue("author")
-	g := req.FormValue("genre")
+	var payload createBookDTO
+	json.NewDecoder(req.Body).Decode(&payload)
+
+	t, a, g := payload.Title, payload.Author, payload.Genre
 	genre, e := transformGenre(g)
 	i := len(BOOKS) + 1
 
@@ -58,15 +59,17 @@ func HandlePostBook(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 		Author: a,
 		Genre: genre,
 	}
+	BOOKS = append(BOOKS, nBook)
 
-	BOOKS = append(BOOKS, nBook)	
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(nBook)
 }
 
 func HandleUpdateBook(w http.ResponseWriter, req *http.Request, ps httprouter.Params) {
-	t := req.FormValue("title")
-	a := req.FormValue("author")
-	g := req.FormValue("genre")
+	var payload updateBookDTO
+	json.NewDecoder(req.Body).Decode(&payload)
+
+	t, a, g := payload.Title, payload.Author, payload.Genre
 	genre, e := transformGenre(g)
 
 	if e != nil && e.Error() != "Empty string" {
